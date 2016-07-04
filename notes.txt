@@ -1,0 +1,64 @@
+1、强制生成一个package.json文件
+npm init -f
+
+2、mosca是一个MQTT的代理，这意味着它实现了MQTT协议，我们就可以在node上运行MQTT Server
+官网：https://github.com/mcollina/mosca
+虽然是MQTT代理，但是本身不具有集群功能：如果要扩展它，还需要借助其它第三方库，如Redis,MongoDB,RabbitMQ,ZeroMQ等
+
+安装mqtt代理mosca库
+npm install mosca --save
+
+
+3、mosca是发布与订阅的形式
+mosca Events 触发事件
+
+ready               服务端准备完成
+error               服务端发生错误
+published           发布数据后           
+subscribed          客户端订阅后
+unsubscribed        客户端取消订阅后
+clientConnected     客户端连接成功后
+clientDisconnected  客户端取消订阅后
+
+
+4、基于nodejs的客户端实现
+
+安装mqtt的客户端
+npm install mqtt --save
+
+server.js       是服务端
+client.js       是客户端
+client.html     是网页方式客户端
+
+
+5、基于用户的权限验证
+客户端：
+var client = mqtt.connect('mqtt://localhost:7410',{username:'jay',password:'pass'});
+
+
+服务端：
+var auth = new mosca.Authorizer(); //角色验证控制
+
+server.on('ready', () => {
+    console.log('MQTT server started');
+    //权限验证
+    server.authenticate = auth.authenticate;
+    server.authorizePublish = auth.authorizePublish; //发布的时候要验证
+    server.authorizeSubscribe = auth.authorizeSubscribe; //订阅的时候要验证
+    console.log('Authorize is ready');
+    auth.addUser('jay','pass', (err) => {
+        if(err){
+            console.error(err);
+        }
+        console.log('Add user succeed');
+    });
+});
+
+
+6、
+
+//使用通配符#（是可以匹配所有的包括后面还有主题）+ （是可以匹配当前主题下所有主题）
+client.subscribe('node1/node2/#');
+
+//发布数据
+client.publish('node1/node2/node3', new Date().toLocaleString());

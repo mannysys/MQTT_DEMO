@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mqtt client</title>
+</head>
+<body>
+
+
+<script src="http://localhost:7410/mqtt.js"></script>
+<script>
+    var client = mqtt.connect('mqtt://localhost:7410',{username:'jay',password:'pass'});
+
+    client.on('connect', function(){
+        //订阅主题树
+        // client.subscribe('node1/node2/node3');
+         
+        // 使用通配符#（是可以匹配所有的包括后面还有主题）+ （是可以匹配当前主题下所有主题）
+        client.subscribe('test/+');
+
+
+         //发布数据
+        client.publish('test/abc', 'test/abc', function(err){
+            console.log(err);
+        });
+    });
+
+    //处理订阅数据
+    client.on('message', function(topic, message){
+        console.log(topic, message.toString());
+    });
+    //断开连接
+    client.on('close', function(){
+        console.log('close');
+    });
+    //重试
+    client.on('reconnect', function(){
+        console.log('reconnect');
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mqtt client</title>
+</head>
+<body>
+
+
+<script src="http://localhost:7410/mqtt.js"></script>
+<script>
+    var client = mqtt.connect('mqtt://localhost:7410',{username:'jay',password:'pass'});
+
+    client.on('connect', function(){
+
+        client.subscribe('abc');  //订阅
+        client.publish('abc', 'xxxxxx'); //发布
+
+    });
+
+    //处理订阅数据
+    client.on('message', function(topic, message){
+        console.log(topic, message.toString());
+    });
+    //断开连接
+    client.on('close', function(){
+        console.log('close');
+    });
+    //重试
+    client.on('reconnect', function(){
+        console.log('reconnect');
+    })
+
+</script>
+</body>
+</html>

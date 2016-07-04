@@ -1,0 +1,20 @@
+{
+  "name": "mqtt-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "brace-expansion": "^1.1.5",
+    "mosca": "^2.0.1",
+    "mqtt": "^1.12.0",
+    "process-nextick-args": "^1.0.7",
+    "util-deprecate": "^1.0.2"
+  }
+}
